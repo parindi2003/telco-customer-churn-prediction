@@ -35,3 +35,32 @@ Business recommendation: incentivize longer-term contracts to reduce churn.
 
 ## Tech Stack
 Python, pandas, scikit-learn, FastAPI
+
+## Feature Engineering
+
+Before training any models, the raw data needed to be converted into a 
+format machine learning algorithms can understand — mostly numbers, not text.
+
+**Steps taken:**
+
+1. **Removed customerID** — this is just a unique identifier for each 
+   customer and carries no useful information for predicting churn.
+
+2. **Converted Yes/No columns to 1/0** — columns like `Partner`, 
+   `Dependents`, `PhoneService`, and the target column `Churn` itself 
+   only had two possible values, so they were mapped directly to 1 
+   (Yes) and 0 (No).
+
+3. **One-Hot Encoded multi-category columns** — columns like `Contract`, 
+   `InternetService`, and `PaymentMethod` have three or more categories 
+   with no natural order between them. Instead of assigning arbitrary 
+   numbers (which would falsely imply ranking), each category was split 
+   into its own True/False column. This expanded the dataset from 20 to 
+   31 columns.
+
+4. **Split into training and test sets** — 80% of the data was used for 
+   training the models, and 20% was held back to test how well the 
+   models perform on data they haven't seen before. The split was 
+   stratified, meaning both sets preserve the same 73.5% / 26.5% 
+   churn ratio as the original data — important for keeping evaluation 
+   fair on this imbalanced dataset.
