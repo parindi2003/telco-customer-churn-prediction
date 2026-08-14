@@ -31,7 +31,53 @@ converting to numeric and filling missing values with 0.
 Business recommendation: incentivize longer-term contracts to reduce churn.
 
 ## How to Run
-(will add after project is complete)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/parindi2003/telco-customer-churn-prediction.git
+cd telco-customer-churn-prediction
+```
+
+### 2. Set up a virtual environment
+
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # macOS/Linux
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Download the dataset
+
+Download the **Telco Customer Churn** dataset from [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) 
+and place the CSV file in `data/raw/`.
+
+### 5. Run the notebooks (optional — to reproduce the analysis)
+
+Open the notebooks in order using Jupyter or VS Code:
+
+Running `03_model_training.ipynb` regenerates the saved model files in 
+`models/` (`churn_model.pkl`, `scaler.pkl`, `feature_columns.pkl`).
+
+### 6. Run the API locally
+
+```bash
+uvicorn src.main:app --reload
+```
+
+The API will be available at `http://127.0.0.1:8000`, with interactive 
+docs at `http://127.0.0.1:8000/docs`.
+
+### 7. Try the live version (no setup required)
+
+The API is already deployed and publicly accessible — see the 
+[Live API](#live-api) section above.
 
 ## Tech Stack
 Python, pandas, scikit-learn, FastAPI
