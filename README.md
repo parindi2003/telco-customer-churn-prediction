@@ -172,3 +172,107 @@ strongest predictors of churn. Retention efforts are likely to have the
 biggest impact if focused on the critical early period of a customer's 
 lifecycle, and on converting month-to-month customers to longer-term 
 contracts.
+
+## Deployment
+
+A machine learning model is only useful if it can actually be used — 
+not just run inside a notebook. To make this project usable in a 
+real-world setting, the trained Logistic Regression model was deployed 
+as a REST API using FastAPI, a modern Python web framework for building 
+APIs quickly.
+
+This means the model can now receive a new customer's data over HTTP 
+and return a churn prediction in real time — the same way a company's 
+internal system would call it to flag at-risk customers automatically.
+
+### Why FastAPI?
+
+FastAPI was chosen because it's lightweight, fast, and automatically 
+generates interactive API documentation (available at `/docs`), which 
+makes it easy for anyone — including recruiters or other developers — 
+to test the API directly from a browser without writing any code.
+
+### How the deployment works, step by step
+
+1. **Saving the trained model:** After training, the final model 
+   (Logistic Regression), along with the `StandardScaler` used to scale 
+   the features and the list of feature columns from training, were all 
+   saved to disk using `joblib`. This avoids having to retrain the model 
+   every time the application starts.
+
+2. **Building the API (`src/main.py`):** A FastAPI application was 
+   created that loads these saved files on startup. A `Customer` data 
+   model (using Pydantic) defines exactly what fields and data types 
+   are expected in a request — this gives free input validation, so if 
+   someone sends malformed data, the API automatically returns a clear 
+   error instead of crashing.
+
+3. **The `/predict` endpoint:** When a POST request is sent to 
+   `/predict` with a customer's details, the API:
+   - Converts the incoming data into the same format used during 
+     training (applying one-hot encoding to categorical fields).
+   - Aligns the columns to match exactly what the model expects, since 
+     the order and presence of columns must be identical to training 
+     time.
+   - Scales the numeric values using the same scaler fitted on the 
+     training data (this is important — using a new scaler on live 
+     data would introduce inconsistency, known as data leakage).
+   - Feeds the processed data into the trained model to generate both 
+     a class prediction (churn or not) and a probability score.
+
+4. **Returning a useful response:** Rather than returning just "Yes" or 
+   "No", the API also returns a churn probability (e.g., 0.70), which 
+   gives a business more flexibility — for example, they could choose 
+   to only act on customers above a certain risk threshold, rather than 
+   treating every "Yes" prediction the same way.
+
+### Example Request
+
+```json
+POST /predict
+{
+  "gender": 1,
+  "SeniorCitizen": 0,
+  "Partner": 1,
+  "Dependents": 0,
+  "tenure": 2,
+  "PhoneService": 1,
+  "PaperlessBilling": 1,
+  "MonthlyCharges": 70.5,
+  "TotalCharges": 141.0,
+  "MultipleLines": "No",
+  "InternetService": "Fiber optic",
+  "OnlineSecurity": "No",
+  "OnlineBackup": "No",
+  "DeviceProtection": "No",
+  "TechSupport": "No",
+  "StreamingTV": "No",
+  "StreamingMovies": "No",
+  "Contract": "Month-to-month",
+  "PaymentMethod": "Electronic check"
+}
+```
+
+### Example Response
+
+```json
+{
+  "churn_prediction": "Yes",
+  "churn_probability": 0.70
+}
+```
+
+This example represents a customer with a short tenure, a month-to-month 
+contract, and fiber optic internet — a combination that earlier EDA and 
+feature importance analysis identified as a high-risk churn profile. 
+The model's prediction here is consistent with those findings, which is 
+a good sign that the model has learned meaningful, explainable patterns 
+rather than arbitrary noise.
+
+### Live API
+🔗 [Add your Render URL here once deployed]
+
+### Interactive API Docs
+FastAPI automatically generates interactive Swagger documentation at 
+`/docs` on the running server, allowing the `/predict` endpoint to be 
+tested directly from a browser.
