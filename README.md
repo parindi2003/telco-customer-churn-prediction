@@ -270,9 +270,9 @@ a good sign that the model has learned meaningful, explainable patterns
 rather than arbitrary noise.
 
 ### Live API
-🔗 [Add your Render URL here once deployed]
+🔗 **[https://telco-customer-churn-prediction-production-d0b5.up.railway.app](https://telco-customer-churn-prediction-production-d0b5.up.railway.app)**
 
-### Interactive API Docs
-FastAPI automatically generates interactive Swagger documentation at 
+Interactive API docs: 
+**[https://telco-customer-churn-prediction-production-d0b5.up.railway.app/docs](https://telco-customer-churn-prediction-production-d0b5.up.railway.app/docs)** 
 `/docs` on the running server, allowing the `/predict` endpoint to be 
 tested directly from a browser.
