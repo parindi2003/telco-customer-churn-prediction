@@ -197,7 +197,7 @@ evaluation on the data, not by assumptions about model complexity.
 
 The model correctly identifies 212 out of 374 actual churners (56.7% 
 recall). The 162 missed churners (false negatives) are the most costly 
-errors from a business perspective — these are customers who leave 
+errors from a business perspective  these are customers who leave 
 without the company having any warning to intervene. Reducing this 
 number would be the top priority for future model improvement, since 
 a missed churner has a higher business cost than a false alarm (an 
@@ -228,7 +228,7 @@ as a REST API using FastAPI, a modern Python web framework for building
 APIs quickly.
 
 This means the model can now receive a new customer's data over HTTP 
-and return a churn prediction in real time — the same way a company's 
+and return a churn prediction in real time the same way a company's 
 internal system would call it to flag at-risk customers automatically.
 
 ### Why FastAPI?
@@ -249,7 +249,7 @@ to test the API directly from a browser without writing any code.
 2. **Building the API (`src/main.py`):** A FastAPI application was 
    created that loads these saved files on startup. A `Customer` data 
    model (using Pydantic) defines exactly what fields and data types 
-   are expected in a request — this gives free input validation, so if 
+   are expected in a request - this gives free input validation, so if 
    someone sends malformed data, the API automatically returns a clear 
    error instead of crashing.
 
@@ -261,14 +261,14 @@ to test the API directly from a browser without writing any code.
      the order and presence of columns must be identical to training 
      time.
    - Scales the numeric values using the same scaler fitted on the 
-     training data (this is important — using a new scaler on live 
+     training data (this is important  using a new scaler on live 
      data would introduce inconsistency, known as data leakage).
    - Feeds the processed data into the trained model to generate both 
      a class prediction (churn or not) and a probability score.
 
 4. **Returning a useful response:** Rather than returning just "Yes" or 
    "No", the API also returns a churn probability (e.g., 0.70), which 
-   gives a business more flexibility — for example, they could choose 
+   gives a business more flexibility  for example, they could choose 
    to only act on customers above a certain risk threshold, rather than 
    treating every "Yes" prediction the same way.
 
@@ -309,7 +309,7 @@ POST /predict
 ```
 
 This example represents a customer with a short tenure, a month-to-month 
-contract, and fiber optic internet — a combination that earlier EDA and 
+contract, and fiber optic internet  a combination that earlier EDA and 
 feature importance analysis identified as a high-risk churn profile. 
 The model's prediction here is consistent with those findings, which is 
 a good sign that the model has learned meaningful, explainable patterns 
